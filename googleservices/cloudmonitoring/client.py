@@ -2,10 +2,10 @@ import json
 import logging
 from googleapiclient.discovery import build
 import httplib2
-from cloudmonitoring.errors import CloudMonitoringError
-from shared.base_client import GoogleCloudClient
-from shared.client import GoogleCloudHttp, GoogleCloudModel
-from shared.utils import get_google_credentials, get_gce_unique_id, get_timestamp_RFC3375
+from googleservices.cloudmonitoring.errors import CloudMonitoringError
+from googleservices.shared.base_client import GoogleCloudClient
+from googleservices.shared.client import GoogleCloudHttp, GoogleCloudModel
+from googleservices.shared.utils import get_google_credentials, get_gce_unique_id, get_timestamp_RFC3375
 
 __author__ = 'krakover'
 

@@ -1,8 +1,8 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from shared.base_client import GoogleCloudClient
+from googleservices.shared.base_client import GoogleCloudClient
 
-from shared.client import GoogleCloudModel, GoogleCloudHttp
+from googleservices.shared.client import GoogleCloudModel, GoogleCloudHttp
 
 
 __author__ = 'ekampf'

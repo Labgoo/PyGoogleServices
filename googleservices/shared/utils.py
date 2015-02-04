@@ -5,7 +5,7 @@ import httplib2
 from oauth2client import gce
 from oauth2client.appengine import AppAssertionCredentials
 from oauth2client.file import Storage
-from shared.errors import GoogleCloudAuthorizationError, GoogleCloudComputeFailedToGetUniqueIdError
+from googleservices.shared.errors import GoogleCloudAuthorizationError, GoogleCloudComputeFailedToGetUniqueIdError
 
 __author__ = 'krakover'
 

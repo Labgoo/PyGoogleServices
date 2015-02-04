@@ -1,4 +1,4 @@
-from shared.errors import GoogleCloudError
+from googleservices.shared.errors import GoogleCloudError
 
 __author__ = 'ekampf'
 

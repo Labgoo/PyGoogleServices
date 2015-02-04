@@ -1,8 +1,8 @@
 import io
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
-from shared.base_client import GoogleCloudClient
-from shared.client import GoogleCloudHttp, GoogleCloudModel
+from googleservices.shared.base_client import GoogleCloudClient
+from googleservices.shared.client import GoogleCloudHttp, GoogleCloudModel
 
 __author__ = 'krakover'
 

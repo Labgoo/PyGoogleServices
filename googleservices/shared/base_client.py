@@ -1,5 +1,5 @@
 import httplib2
-from shared.utils import get_google_credentials
+from googleservices.shared.utils import get_google_credentials
 
 __author__ = 'krakover'
 
