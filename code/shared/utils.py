@@ -1,10 +1,13 @@
 import logging
 import os
+import datetime
 import httplib2
 from oauth2client import gce
 from oauth2client.appengine import AppAssertionCredentials
 from oauth2client.file import Storage
-from googleservices.errors import GoogleCloudAuthorizationError
+from shared.errors import GoogleCloudAuthorizationError, GoogleCloudComputeFailedToGetUniqueIdError
+
+__author__ = 'krakover'
 
 
 def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', jwt_key_func=None, oauth_credentails_file=None):
@@ -53,5 +56,14 @@ def get_gce_unique_id(self):
 
     if int(resp['status']) != 200:
         logging.error("Error getting machine id: %s", resp)
-        return None
+        raise GoogleCloudComputeFailedToGetUniqueIdError()  # TODO parse error
+
     return unique_machine_id
+
+
+def get_timestamp_RFC3375(self):
+    # TODO add the correct microseconds, with 2 characters
+    now = datetime.datetime.now()
+    now = now.replace(microsecond=0)
+    timestamp = now.isoformat('T') + '.00Z'  # Create RFC 3375 date format
+    return timestamp
