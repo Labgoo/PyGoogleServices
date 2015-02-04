@@ -145,3 +145,6 @@ class GoogleCloudUserRateLimitExceededError(GoogleCloudServiceError):
 
 class GoogleCloudQuotaExceededError(GoogleCloudServiceError):
     pass
+
+class GoogleCloudComputeFailedToGetUniqueIdError(GoogleCloudServiceError):
+    pass
