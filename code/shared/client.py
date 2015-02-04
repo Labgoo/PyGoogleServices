@@ -1,7 +1,7 @@
 import json
 from googleapiclient import http, model
 from googleapiclient.errors import HttpError
-from googleservices.errors import GoogleCloudError
+from shared.errors import GoogleCloudError
 
 __author__ = 'krakover'
 

@@ -1,9 +1,8 @@
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-import httplib2
+from shared.base_client import GoogleCloudClient
 
-from googleservices.client import GoogleCloudModel, GoogleCloudHttp
-from googleservices.utils import get_google_credentials
+from shared.client import GoogleCloudModel, GoogleCloudHttp
 
 
 __author__ = 'ekampf'
@@ -36,20 +35,14 @@ class BigQueryHttp(GoogleCloudHttp):
 
 
 # pylint: disable=E1002
-class BigQueryClient(object):
+class BigQueryClient(GoogleCloudClient):
     def __init__(self, use_jwt_credentials_auth=False, jwt_account_name='', jwt_key_func=None, oauth_credentails_file=None, trace=None):
         """
         :param trace: A value to add to all outgoing requests
         :return:
         """
-        super(BigQueryClient, self).__init__()
+        super(BigQueryClient, self).__init__(use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
         self.trace = trace
-        self.use_jwt_credentials_auth = use_jwt_credentials_auth
-        self.jwt_account_name = jwt_account_name
-        self.jwt_key_func = jwt_key_func
-        self.oauth_credentails_file = oauth_credentails_file
-
-        self._credentials = None
 
     ###### Wrapping BigQuery's API
 
@@ -68,18 +61,6 @@ class BigQueryClient(object):
     def tables(self):
         return self.api_client.tables()
 
-    @property
-    def credentials(self):
-        if not self._credentials:
-            self._credentials = get_google_credentials(self.use_jwt_credentials_auth, self.jwt_account_name, self.jwt_key_func, self.oauth_credentails_file)
-        return self._credentials
-
-    def get_http_for_request(self):
-        _http = httplib2.Http()
-        _http = self.credentials.authorize(_http)
-        self.credentials.refresh(_http)
-
-        return _http
 
     @property
     def api_client(self):

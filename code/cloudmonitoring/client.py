@@ -3,25 +3,22 @@ import logging
 from googleapiclient.discovery import build
 import httplib2
 from cloudmonitoring.errors import CloudMonitoringError
-from googleservices.client import GoogleCloudHttp, GoogleCloudModel
-from googleservices.utils import get_google_credentials, get_gce_unique_id, get_timestamp_RFC3375
+from shared.base_client import GoogleCloudClient
+from shared.client import GoogleCloudHttp, GoogleCloudModel
+from shared.utils import get_google_credentials, get_gce_unique_id, get_timestamp_RFC3375
 
 __author__ = 'krakover'
 
-class GoogleCloudMonitoringClient(object):
+
+class GoogleCloudMonitoringClient(GoogleCloudClient):
     def __init__(self, use_jwt_credentials_auth=False, jwt_account_name='', jwt_key_func=None, oauth_credentails_file=None, trace=None):
         """
         :param trace: A value to add to all outgoing requests
         :return:
         """
-        super(GoogleCloudMonitoringClient, self).__init__()
+        super(GoogleCloudMonitoringClient, self).__init__( use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
         self.trace = trace
-        self.use_jwt_credentials_auth = use_jwt_credentials_auth
-        self.jwt_account_name = jwt_account_name
-        self.jwt_key_func = jwt_key_func
-        self.oauth_credentails_file = oauth_credentails_file
 
-        self._credentials = None
 
     def write_timeseries_custon_instance_metric_double_value(self, project_id, metric_name, double_value):
         timestamp = get_timestamp_RFC3375()
