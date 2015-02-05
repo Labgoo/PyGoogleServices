@@ -172,7 +172,7 @@ class BigQueryClient(GoogleCloudClient):
                 'load': {
                     'sourceFormat': 'NEWLINE_DELIMITED_JSON',
                     'writeDisposition': 'WRITE_APPEND',
-                    'sourceUris': ['gs:/%s' % s for s in gcs_links],
+                    'sourceUris': ['gs://%s' % s for s in gcs_links],
                     'destinationTable': {
                         'projectId': project_id,
                         'datasetId': dataset_id,
@@ -198,15 +198,19 @@ class BigQueryClient(GoogleCloudClient):
     def monitor_insert_job(self, project_id, job_id):
         try:
             logging.info('about to monitor job: %s', job_id)
-            job = self.api_client.jobs().get(project_id, job_id)
+            job = self.api_client.jobs().get(projectId=project_id, jobId=job_id).execute()
             logging.info('Got job response: %s', job)
 
-
+            print 'job=%s' % job
             state = job['status']['state']
             if state == 'DONE':
                 logging.info("Job %s is done loading!", job_id)
                 if 'errorResult' in job['status']:
-                    raise BigQueryError.create(job['status']['errorResult'], None, job['status']['errors'], {'projectId': project_id, 'jobId': job_id})
+                    print 'error %s' % job['status']['errorResult']
+                    raise BigQueryError.create(job['status']['errorResult'], None, job['status']['errors'],
+                                               {'projectId': project_id, 'jobId': job_id})
+                return True
+            return False
 
         except BigQueryError as ex:
             logging.exception(ex)
@@ -224,7 +228,59 @@ class BigQueryClient(GoogleCloudClient):
         """
 
         try:
-            return self.api_client.jobs().getQueryResults(project_id, job_id, timeoutMs, pageToken, maxResults, startIndex)
+            return self.jobs().getQueryResults(projectId=project_id, jobId=job_id, timeoutMs=timeoutMs,
+                                               pageToken=pageToken, maxResults=maxResults, startIndex=startIndex).execute()
+        except BigQueryError as ex:
+            logging.exception(ex)
+
+    def run_query(self, project_id, query_string):
+        """Retrieves the results of a query job.
+        :param project_id: Project ID of the query job.
+        :param query_string: SQL query of the query job.
+        :return:
+        """
+
+        try:
+            return self.jobs().insert(projectId=project_id,
+                                      body={
+                                          'configuration': {
+                                              'query': {
+                                                  'query': query_string,
+                                              }
+                                          }
+                                      }).execute()
+        except BigQueryError as ex:
+            logging.exception(ex)
+            raise
+
+    def run_query_blocking(self, project_id, query_string):
+        """Retrieves the results of a query job.
+        :param project_id: Project ID of the query job.
+        :param query_string: SQL query of the query job.
+        :return:
+        """
+
+        try:
+            insert_response = self.run_query(project_id, query_string)
+
+            # Get query results. Results will be available for about 24 hours.
+            current_row = 0
+            response = self.get_query_results(
+                project_id,
+                insert_response['jobReference']['jobId'],
+                startIndex=current_row)
+
+            result = None
+            while 'rows' in response and current_row < response['totalRows']:
+                result = response
+                current_row += len(response['rows'])
+
+                response = self.get_query_results(
+                    project_id,
+                    response['jobReference']['jobId'],
+                    startIndex=current_row)
+
+            return result
         except BigQueryError as ex:
             logging.exception(ex)
             raise
