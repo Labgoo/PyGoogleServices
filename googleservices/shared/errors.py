@@ -97,6 +97,10 @@ class GoogleCloudServiceError(GoogleCloudError):
         return '%s: error=%s, error_list=%s, job_ref=%s' % (self.__class__.__name__, self.error, self.error_list, self.job_ref)
 
 
+class GoogleCloudAuthorizationConfigurationError(GoogleCloudError):
+    pass
+
+
 class GoogleCloudAuthorizationError(GoogleCloudServiceError):
     """403 error wrapper"""
     pass

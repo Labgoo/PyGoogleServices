@@ -5,7 +5,8 @@ import httplib2
 from oauth2client import gce
 from oauth2client.appengine import AppAssertionCredentials
 from oauth2client.file import Storage
-from googleservices.shared.errors import GoogleCloudAuthorizationError, GoogleCloudComputeFailedToGetUniqueIdError
+from googleservices.shared.errors import GoogleCloudAuthorizationError, GoogleCloudComputeFailedToGetUniqueIdError, \
+    GoogleCloudAuthorizationConfigurationError
 
 __author__ = 'krakover'
 
@@ -26,14 +27,14 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
         storage = Storage(oauth_credentails_file)
         credentials = storage.get()
         if not credentials:
-            raise GoogleCloudAuthorizationError('No credential file present')
+            raise GoogleCloudAuthorizationConfigurationError('No credential file present')
         logging.info("Using Standard OAuth authentication")
         return credentials
     elif is_in_gce_machine():  # GCE authorization
         credentials = gce.AppAssertionCredentials('')
         logging.info("Using GCE authentication")
         return credentials
-    raise GoogleCloudAuthorizationError('No Credentials provided')
+    raise GoogleCloudAuthorizationConfigurationError('No Credentials provided')
 
 
 def is_in_appengine():
