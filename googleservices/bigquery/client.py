@@ -201,12 +201,10 @@ class BigQueryClient(GoogleCloudClient):
             job = self.api_client.jobs().get(projectId=project_id, jobId=job_id).execute()
             logging.info('Got job response: %s', job)
 
-            print 'job=%s' % job
             state = job['status']['state']
             if state == 'DONE':
                 logging.info("Job %s is done loading!", job_id)
                 if 'errorResult' in job['status']:
-                    print 'error %s' % job['status']['errorResult']
                     raise BigQueryError.create(job['status']['errorResult'], None, job['status']['errors'],
                                                {'projectId': project_id, 'jobId': job_id})
                 return True
