@@ -2,10 +2,8 @@ import logging
 import os
 import datetime
 import httplib2
-from oauth2client import gce
-from oauth2client.appengine import AppAssertionCredentials
 from oauth2client.file import Storage
-from googleservices.shared.errors import GoogleCloudAuthorizationError, GoogleCloudComputeFailedToGetUniqueIdError, \
+from googleservices.shared.errors import GoogleCloudComputeFailedToGetUniqueIdError, \
     GoogleCloudAuthorizationConfigurationError
 
 __author__ = 'krakover'
@@ -20,6 +18,7 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
         return credentials
     elif is_in_appengine():  # App engine
         scope = 'https://www.googleapis.com/auth/devstorage.read_write'
+        from oauth2client.appengine import AppAssertionCredentials
         credentials = AppAssertionCredentials(scope=scope)
         logging.info("Using Standard appengine authentication")
         return credentials
@@ -31,6 +30,7 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
         logging.info("Using Standard OAuth authentication")
         return credentials
     elif is_in_gce_machine():  # GCE authorization
+        from oauth2client import gce
         credentials = gce.AppAssertionCredentials('')
         logging.info("Using GCE authentication")
         return credentials
