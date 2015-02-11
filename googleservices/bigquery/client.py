@@ -207,8 +207,8 @@ class BigQueryClient(GoogleCloudClient):
                 if 'errorResult' in job['status']:
                     raise BigQueryError.create(job['status']['errorResult'], None, job['status']['errors'],
                                                {'projectId': project_id, 'jobId': job_id})
-                return True
-            return False
+                return job
+            return None
 
         except BigQueryError as ex:
             logging.exception(ex)
