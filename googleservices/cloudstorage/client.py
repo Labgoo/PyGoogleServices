@@ -28,6 +28,12 @@ class GoogleCloudStorageClient(GoogleCloudClient):
 
         return response
 
+    def delete_file(self, bucket_name, file_name):
+        return self.objects().delete(bucket=bucket_name, name=file_name)
+
+    def list_files(self, bucket_name, prefix=None):
+        return self.objects().list(bucket=bucket_name, projection=None, versions=None, prefix=prefix, maxResults=None, pageToken=None, delimiter=None)
+
     def bucketAccessControls(self):
         """Returns the bucketAccessControls Resource."""
         return self.api_client.bucketAccessControls()
