@@ -165,13 +165,13 @@ class BigQueryClient(GoogleCloudClient):
 
     # jobs() methods
 
-    def create_insert_job(self, project_id, dataset_id, table_id, gcs_links):
+    def create_insert_job(self, project_id, dataset_id, table_id, gcs_links, mode='WRITE_APPEND'):
         job_data = {
             'projectId': project_id,
             'configuration': {
                 'load': {
                     'sourceFormat': 'NEWLINE_DELIMITED_JSON',
-                    'writeDisposition': 'WRITE_APPEND',
+                    'writeDisposition': mode,
                     'sourceUris': ['gs://%s' % s for s in gcs_links],
                     'destinationTable': {
                         'projectId': project_id,
