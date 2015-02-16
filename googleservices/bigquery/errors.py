@@ -29,14 +29,17 @@ class BigQueryError(GoogleCloudError):
         else:
             message = error.get('message')
 
-
         new_errors = [err for err in error_ls if err != error]
         if new_errors:
             message += '\nFailure details:\n'
-            message += '\n'.join(textwrap.fill(': '.join(filter(None, [err.get('location', None), err.get('message', '')])), initial_indent=' - ', subsequent_indent='   ') for err in new_errors)
+            # print each line error in a separate line
+            message += '\n'.join(textwrap.fill(': '.join(filter(None, [err.get('location', None),
+                                                                       err.get('message', '')])),
+                                               initial_indent=' - ', subsequent_indent='   ') for err in new_errors)
 
         if not reason or not message:
-            return BigQueryInterfaceError('Error reported by server with missing error fields. ' 'Server returned: %s' % (str(server_error),))
+            return BigQueryInterfaceError('Error reported by server with missing error fields. ' 'Server returned: %s' %
+                                          (str(server_error),))
 
         if reason == 'authError':
             return BigQueryAuthorizationError(message)
@@ -53,11 +56,13 @@ class BigQueryError(GoogleCloudError):
             return BigQueryTermsOfServiceError(message, error, error_ls, job_ref=job_ref)
 
         # We map the less interesting errors to BigQueryServiceError.
-        return GoogleCloudError.create(message, error, error_ls, job_ref=job_ref)
+        return BigQueryServiceError(message, error, error_ls, job_ref=job_ref)
+
 
 class BigQueryAuthorizationError(BigQueryError):
     """401 error wrapper"""
     pass
+
 
 class BigQueryCommunicationError(BigQueryError):
     """Error communicating with the server."""
@@ -80,7 +85,8 @@ class BigQueryServiceError(BigQueryError):
 
         :param message: A user-facing error message.
         :param error: The error dictionary, code may inspect the 'reason' key.
-        :param error_list: A list of additional entries, for example a load job may contain multiple errors here for each error encountered during processing.
+        :param error_list: A list of additional entries, for example a load job may contain multiple errors here
+        for each error encountered during processing.
         :param job_ref: Optional job reference.
         :return:
             A BigQueryError instance.
@@ -91,7 +97,8 @@ class BigQueryServiceError(BigQueryError):
         self.job_ref = job_ref
 
     def __repr__(self):
-        return '%s: error=%s, error_list=%s, job_ref=%s' % (self.__class__.__name__, self.error, self.error_list, self.job_ref)
+        return '%s: error=%s, error_list=%s, job_ref=%s' % \
+               (self.__class__.__name__, self.error, self.error_list, self.job_ref)
 
 
 class BigQueryDuplicateError(BigQueryServiceError):
@@ -127,6 +134,7 @@ class BigQueryClientConfigurationError(BigQueryClientError):
 class BigQuerySchemaError(BigQueryClientError):
     """Error in locating or parsing the schema."""
     pass
+
 
 class BigQueryStreamingMaximumRowSizeExceededError(BigQueryError):
     """Thrown when trying to stream-insert a row thats too big."""

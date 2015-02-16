@@ -153,9 +153,11 @@ class BigQueryClient(GoogleCloudClient):
                     rows_json_pass2 = [event for idx, event in enumerate(rows_json) if idx not in invalid_indices]
 
                     body_pass2 = {"rows": rows_json_pass2}
-                    response2 = self.api_client.tabledata().insertAll(projectId=project_id, datasetId=dataset_id, tableId=table_id, body=body_pass2).execute()
+                    response2 = self.api_client.tabledata().insertAll(
+                        projectId=project_id, datasetId=dataset_id, tableId=table_id, body=body_pass2).execute()
 
-                    return dict(response_pass1=response, response_pass2=response2, counts=dict(invalid_rows=len(invalid_indices), successfuly_added=len(rows_json_pass2)))
+                    return dict(response_pass1=response, response_pass2=response2,
+                                counts=dict(invalid_rows=len(invalid_indices), successfuly_added=len(rows_json_pass2)))
 
             logging.info("Successfully inserted %s rows", len(rows))
             return response
@@ -282,5 +284,3 @@ class BigQueryClient(GoogleCloudClient):
         except BigQueryError as ex:
             logging.exception(ex)
             raise
-
-

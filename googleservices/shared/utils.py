@@ -51,9 +51,12 @@ def is_in_gce_machine():
         return False
 
 
-def get_gce_unique_id(self):
-    resp, unique_machine_id = self.get_http_for_request().request(
-        'http://metadata.google.internal/computeMetadata/v1beta1/instance/id')
+def get_gce_unique_id(http):
+    try:
+        resp, unique_machine_id = http.request(
+            'http://metadata.google.internal/computeMetadata/v1beta1/instance/id')
+    except httplib2.ServerNotFoundError:
+        raise GoogleCloudComputeFailedToGetUniqueIdError('Not on gce machine')
 
     if int(resp['status']) != 200:
         logging.error("Error getting machine id: %s", resp)
@@ -62,7 +65,7 @@ def get_gce_unique_id(self):
     return unique_machine_id
 
 
-def get_timestamp_RFC3375(self):
+def get_timestamp_RFC3375():
     # TODO add the correct microseconds, with 2 characters
     now = datetime.datetime.now()
     now = now.replace(microsecond=0)

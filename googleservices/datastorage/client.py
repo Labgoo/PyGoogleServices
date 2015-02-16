@@ -19,7 +19,7 @@ class GoogleDataStoreClient(GoogleCloudClient):
         return self.api_client.datasets()
 
     def get_entity_by_id(self, project_id, entity_name, entity_id):
-        return self.datasets.lookup(datasetId=project_id, body={
+        return self.datasets().lookup(datasetId=project_id, body={
             'keys': [{'path': [{'kind': entity_name, 'name': entity_id}]}],
         }).execute()
 

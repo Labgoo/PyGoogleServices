@@ -38,7 +38,8 @@ class GoogleCloudError(Exception):
         message, reason = GoogleCloudError.parse_error(error, error_ls, job_ref)
 
         if not reason or not message:
-            return GoogleCloudInterfaceError('Error reported by server with missing error fields. ' 'Server returned: %s' % (str(server_error),))
+            return GoogleCloudInterfaceError(
+                'Error reported by server with missing error fields. ' 'Server returned: %s' % (str(server_error),))
 
         if reason == 'authError':
             return GoogleCloudAuthorizationError(message)
@@ -149,6 +150,7 @@ class GoogleCloudUserRateLimitExceededError(GoogleCloudServiceError):
 
 class GoogleCloudQuotaExceededError(GoogleCloudServiceError):
     pass
+
 
 class GoogleCloudComputeFailedToGetUniqueIdError(GoogleCloudServiceError):
     pass

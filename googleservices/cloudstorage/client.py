@@ -46,7 +46,8 @@ class GoogleCloudStorageClient(GoogleCloudClient):
         keytext = open(service_account_key_file, 'rb').read()
         private_key = RSA.importKey(keytext)
 
-        signer = CloudStorageURLSigner(private_key, service_account_mail, 'https://storage.googleapis.com', expiration=expiration)
+        signer = CloudStorageURLSigner(private_key, service_account_mail,
+                                       'https://storage.googleapis.com', expiration=expiration)
         response = signer.get('/{0}/{1}'.format(bucket_name, file_name))
         return response.url
 
@@ -175,4 +176,3 @@ class CloudStorageURLSigner(object):
         """
         base_url, query_params = self._make_url('DELETE', path)
         return self.session.delete(base_url, params=query_params)
-

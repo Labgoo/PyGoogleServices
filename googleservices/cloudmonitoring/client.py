@@ -19,12 +19,12 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         super(GoogleCloudMonitoringClient, self).__init__( use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
         self.trace = trace
 
-
     def write_timeseries_custon_instance_metric_double_value(self, project_id, metric_name, double_value):
         timestamp = get_timestamp_RFC3375()
+        http = self.get_http_for_request()
 
         # Writing not supported by API - TODO REST call remove once api supports this
-        unique_machine_id = get_gce_unique_id()
+        unique_machine_id = get_gce_unique_id(http)
 
         timeseries_dict = {
             'kind': 'cloudmonitoring#writeTimeseriesRequest',
@@ -47,7 +47,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
             }]
         }
 
-        resp, content = self.get_http_for_request().request(
+        resp, content = http.request(
             uri='https://www.googleapis.com/cloudmonitoring/v2beta2/projects/%s/timeseries:write' % project_id,
             method='POST',
             headers={'Content-Type': 'application/json'},
@@ -55,12 +55,13 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
 
         if int(resp['status']) != 200:
             logging.error('Error reporting to cloud monitoring: %s from instance %s', resp, unique_machine_id)
-            raise CloudMonitoringError()  # TODO parse error
+            raise CloudMonitoringError('received error %s while attempting to write time series data' % resp['status'])
 
     @property
     def credentials(self):
         if not self._credentials:
-            self._credentials = get_google_credentials(self.use_jwt_credentials_auth, self.jwt_account_name, self.jwt_key_func, self.oauth_credentails_file)
+            self._credentials = get_google_credentials(self.use_jwt_credentials_auth, self.jwt_account_name,
+                                                       self.jwt_key_func, self.oauth_credentails_file)
         return self._credentials
 
     def get_http_for_request(self):
@@ -73,7 +74,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
     @property
     def api_client(self):
         _http = self.get_http_for_request()
-        cloudstorage_model = GoogleCloudModel(trace=self.trace)
-        cloudstorage_http = GoogleCloudHttp.factory(cloudstorage_model)
+        monitoring_model = GoogleCloudModel(trace=self.trace)
+        monitoring_http = GoogleCloudHttp.factory(monitoring_model)
 
-        return build("cloudmonitoring", "v2beta2", http=_http, model=cloudstorage_model, requestBuilder=cloudstorage_http)
+        return build("cloudmonitoring", "v2beta2", http=_http, model=monitoring_model, requestBuilder=monitoring_http)
