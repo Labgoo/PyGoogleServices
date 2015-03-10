@@ -7,9 +7,9 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaIoBaseUpload
 import time
-from googledrive.errors import GoogleDriveError
-from shared.base_client import GoogleCloudClient
-from shared.client import GoogleCloudModel, GoogleCloudHttp
+from googleservices.googledrive.errors import GoogleDriveError
+from googleservices.shared.base_client import GoogleCloudClient
+from googleservices.shared.client import GoogleCloudModel, GoogleCloudHttp
 
 __author__ = 'barakcoh'
 
