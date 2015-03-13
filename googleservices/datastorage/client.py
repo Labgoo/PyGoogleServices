@@ -11,7 +11,7 @@ class GoogleDataStoreClient(GoogleCloudClient):
         :param trace: A value to add to all outgoing requests
         :return:
         """
-        super(GoogleDataStoreClient, self).__init__( use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
+        super(GoogleDataStoreClient, self).__init__(use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
         self.trace = trace
 
     def datasets(self):
@@ -29,4 +29,4 @@ class GoogleDataStoreClient(GoogleCloudClient):
         cloudstorage_model = GoogleCloudModel(trace=self.trace)
         cloudstorage_http = GoogleCloudHttp.factory(cloudstorage_model)
 
-        return build("storage", "v1", http=_http, model=cloudstorage_model, requestBuilder=cloudstorage_http)
+        return build("datastore", "v1beta2", http=_http, model=cloudstorage_model, requestBuilder=cloudstorage_http)
