@@ -29,4 +29,4 @@ class GoogleTaskQueueClient(GoogleCloudClient):
         taskqueue_model = GoogleCloudModel(trace=self.trace)
         taskqueue_http = GoogleCloudHttp.factory(taskqueue_model)
 
-        return build("taskqueue", "v1beta2", http=_http, model=taskqueue_model, requestBuilder=taskqueue_http)
+        return build('taskqueue', 'v1beta2', http=_http, model=taskqueue_model, requestBuilder=taskqueue_http)
