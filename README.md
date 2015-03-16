@@ -16,7 +16,7 @@ import googleservices
 
 Add to your requirements.txt:
 ```
-git://git@github.com:Labgoo/PyGoogleServices.git
+git+http://git@github.com/Labgoo/PyGoogleServices.git
 ```
 
 Import the module in your code:
