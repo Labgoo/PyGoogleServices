@@ -33,7 +33,7 @@ PACKAGE = 'googleservices'
 
 
 setup(
-    name='=googleservices',
+    name='googleservices',
     version=get_version(PACKAGE),
     description="A lighweight python wrapper on top of google services REST API",
     author='Neta Krakover',
