@@ -271,7 +271,7 @@ class BigQueryClient(GoogleCloudClient):
                 startIndex=current_row)
 
             result = None
-            while 'rows' in response and current_row < response['totalRows']:
+            while 'rows' in response and current_row < int(response['totalRows']):
                 result = response
                 current_row += len(response['rows'])
 
