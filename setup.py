@@ -6,7 +6,7 @@ import os
 import re
 import sys
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -42,13 +42,27 @@ setup(
     maintainer_email='krakover@gmail.com',
     url='https://github.com/Labgoo/PyGoogleServices',
     keywords=[],
-    packages=['googleservices'],
+    packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     # license='MIT',
+    # dependency_links=[
+    #     "git+https://github.com/Labgoo/perfmetrics.git#egg=perfmetrics",
+    # ],
     setup_requires=[
         'setuptools>=0.8',
+        'setuptools-lint',
     ],
     tests_require=[
-        #'mock',
+        'mock',
+    ],
+    install_requires=[
+        # 'perfmetrics',
+        'jsonschema==2.3.0',
+        'google-api-python-client==1.3.1',
+        'oauth2client==1.3',
+        'httplib2==0.9',
+        'pycrypto==2.6.1',
+        'Crypto',
+        'requests==0.14.2',
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
