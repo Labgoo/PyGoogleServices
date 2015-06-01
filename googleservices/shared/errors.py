@@ -20,6 +20,7 @@ class GoogleCloudError(Exception):
                               initial_indent=' - ', subsequent_indent='   ') for err in new_errors)
         return message, reason
 
+    # pylint:disable=R0912
     @staticmethod
     def create(error, server_error, error_ls, job_ref=None):
         """Returns a GoogleCloudStorageError for the JSON error that's embedded in the server error response.

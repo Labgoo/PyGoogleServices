@@ -16,7 +16,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         :param trace: A value to add to all outgoing requests
         :return:
         """
-        super(GoogleCloudMonitoringClient, self).__init__( use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
+        super(GoogleCloudMonitoringClient, self).__init__(use_jwt_credentials_auth, jwt_account_name, jwt_key_func, oauth_credentails_file)
         self.trace = trace
 
     def write_timeseries_custon_instance_metric_double_value(self, project_id, metric_name, double_value):
@@ -33,21 +33,22 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
                 'compute.googleapis.com/resource_id': unique_machine_id
             },
             'timeseries': [
-            {
-                'timeseriesDesc': {
-                    'metric': 'custom.cloudmonitoring.googleapis.com/custom/%s' % metric_name,
-                    'labels': {
-                    }
-                },
-                'point': {
-                    'start': timestamp,
-                    'end': timestamp,
-                    'doubleValue': double_value
-                },
-            }]
+                {
+                    'timeseriesDesc': {
+                        'metric': 'custom.cloudmonitoring.googleapis.com/custom/%s' % metric_name,
+                        'labels': {
+                        }
+                    },
+                    'point': {
+                        'start': timestamp,
+                        'end': timestamp,
+                        'doubleValue': double_value
+                    },
+                }
+            ]
         }
 
-        resp, content = http.request(
+        resp, _ = http.request(
             uri='https://www.googleapis.com/cloudmonitoring/v2beta2/projects/%s/timeseries:write' % project_id,
             method='POST',
             headers={'Content-Type': 'application/json'},
@@ -78,3 +79,5 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         monitoring_http = GoogleCloudHttp.factory(monitoring_model)
 
         return build("cloudmonitoring", "v2beta2", http=_http, model=monitoring_model, requestBuilder=monitoring_http)
+
+

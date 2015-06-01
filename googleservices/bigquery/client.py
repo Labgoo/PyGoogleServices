@@ -19,7 +19,7 @@ from .errors import BigQueryError, BigQueryDuplicateError, \
 class BigQueryHttp(GoogleCloudHttp):
     def execute(self, **kwargs):
         try:
-            return super(GoogleCloudHttp, self).execute(**kwargs)
+            return super(BigQueryHttp, self).execute(**kwargs)
         except HttpError, e:
             self._model._log_response(e.resp, e.content)
 
@@ -109,6 +109,7 @@ class BigQueryClient(GoogleCloudClient):
 
     # tabledata()  methods
 
+    # pylint:disable=R0914
     def insert_rows(self, project_id, dataset_id, table_id, insert_id_generator, rows, ignore_invalid_rows=False):
         """Streams data into BigQuery one record at a time without needing to run a load job.
 
@@ -284,3 +285,5 @@ class BigQueryClient(GoogleCloudClient):
         except BigQueryError as ex:
             logging.exception(ex)
             raise
+
+
