@@ -7,9 +7,9 @@ from Crypto.Hash import SHA256
 from Crypto.PublicKey import RSA
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
-import requests
 from googleservices.shared.base_client import GoogleCloudClient
 from googleservices.shared.client import GoogleCloudHttp, GoogleCloudModel
+import requests
 
 __author__ = 'krakover'
 
