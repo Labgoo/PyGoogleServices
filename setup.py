@@ -55,12 +55,11 @@ setup(
         'mock',
     ],
     install_requires=[
-        'jsonschema==2.3.0',
+        # 'jsonschema==2.3.0',
         'google-api-python-client==1.3.1',
         'oauth2client==1.3',
-        'httplib2==0.9',
+        # 'httplib2==0.9',
         'pycrypto==2.6.1',
-        'Crypto',
         'requests==0.14.2',
     ],
     classifiers=[
