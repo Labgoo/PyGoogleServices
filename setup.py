@@ -21,6 +21,8 @@ def get_build_number():
     return ''
 
 def get_version(package_name):
+    build_number = get_build_number()
+    
     version_re = re.compile(r"^__version__ = [\"']([\w_.-]+)[\"']$")
     package_components = package_name.split('.')
     init_path = os.path.join(root_dir, *(package_components + ['__init__.py']))
@@ -28,10 +30,13 @@ def get_version(package_name):
         for line in f:
             match = version_re.match(line[:-1])
             if match:
-                return match.groups()[0]
-    return '0.1.0'
+                return match.groups()[0]+build_number
+
+    return '0.1' + build_number
+
 
 PACKAGE = 'googleservices'
+
 
 setup(
     name='googleservices',
