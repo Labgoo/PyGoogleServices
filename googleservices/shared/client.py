@@ -53,3 +53,5 @@ class GoogleCloudHttp(http.HttpRequest):
                     ('Could not connect with Google Cloud Storage server.\n'
                      'Http response status: %s\n'
                      'Http response content:\n%s') % (e.resp.get('status', '(unexpected)'), e.content))
+
+

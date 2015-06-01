@@ -71,3 +71,4 @@ def get_timestamp_RFC3375():
     now = now.replace(microsecond=0)
     timestamp = now.isoformat('T') + '.00Z'  # Create RFC 3375 date format
     return timestamp
+    
