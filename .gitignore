@@ -2,3 +2,5 @@ lib
 include
 bin
 .Python
+pip-selfcheck.json
+man
