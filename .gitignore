@@ -1,6 +1,12 @@
+*.pyc
+
 lib
 include
 bin
 .Python
 pip-selfcheck.json
 man
+htmlcov
+googleservices.egg-info
+.eggs
+.coverage
