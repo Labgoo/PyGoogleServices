@@ -79,5 +79,4 @@ setup(
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
     test_suite='tests',
-    test_loader=test_loader,
 )
