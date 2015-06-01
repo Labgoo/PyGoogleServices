@@ -1,7 +1,34 @@
-test:
-	nosetests ./googleservices/tests/* -x --processes=20 --process-timeout 800 --with-xunitmp --nologcapture
-test_with_cov:
-	nosetests ./googleservices/tests/* --processes=20 --process-timeout 800 --with-xunitmp --with-cov --cov-config nose-cov.config --cov-report xml --nologcapture --logging-level=WARNING
+PACKAGE=googleservices
+TESTS_DIR=tests
+DOC_DIR=docs
 
-lint:
-	pylint -f colorized --rcfile=.pylintrc ./googleservices/  || exit 0
+# Use current python binary instead of system default.
+COVERAGE = python $(shell which coverage)
+
+all: default
+
+default: clean coverage pylint test
+
+clean:
+	find . -type f -name '*.pyc' -delete
+	find . -type f -path '*/__pycache__/*' -delete
+	find . -type d -empty -delete
+	@rm -rf tmp_test/
+
+test:
+	python -W default setup.py nosetests --with-xunit --with-cov --verbosity=2
+
+pylint:
+	python setup.py lint --lint-rcfile=.pylintrc --lint-reports=no --lint-packages=$(PACKAGE)/
+
+coverage:
+	$(COVERAGE) erase
+	$(COVERAGE) run "--include=$(PACKAGE)/*.py,$(TESTS_DIR)/*.py" --branch setup.py test
+	$(COVERAGE) report "--include=$(PACKAGE)/*.py,$(TESTS_DIR)/*.py"
+	$(COVERAGE) html "--include=$(PACKAGE)/*.py,$(TESTS_DIR)/*.py"
+
+doc:
+	make -C $(DOC_DIR) html
+
+
+.PHONY: all default clean coverage doc pylint test

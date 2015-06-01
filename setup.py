@@ -10,6 +10,15 @@ from setuptools import setup, find_packages
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
 
+def get_build_number():
+    fname = 'build.info'
+    if os.path.isfile(fname):
+        with open(fname) as f:
+            build_number = f.read()
+            build_number = re.sub("[^a-z0-9]+","", build_number, flags=re.IGNORECASE)
+            return '.' + build_number
+            
+    return ''
 
 def get_version(package_name):
     version_re = re.compile(r"^__version__ = [\"']([\w_.-]+)[\"']$")
@@ -22,15 +31,7 @@ def get_version(package_name):
                 return match.groups()[0]
     return '0.1.0'
 
-
-if sys.version_info[0:2] < (2, 7):  # pragma: no cover
-    test_loader = 'unittest2:TestLoader'
-else:
-    test_loader = 'unittest:TestLoader'
-
-
 PACKAGE = 'googleservices'
-
 
 setup(
     name='googleservices',
@@ -43,19 +44,17 @@ setup(
     url='https://github.com/Labgoo/PyGoogleServices',
     keywords=[],
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    # license='MIT',
-    # dependency_links=[
-    #     "git+https://github.com/Labgoo/perfmetrics.git#egg=perfmetrics",
-    # ],
     setup_requires=[
         'setuptools>=0.8',
         'setuptools-lint',
+        'unittest2',
+        'coverage',
+        'nose'
     ],
     tests_require=[
         'mock',
     ],
     install_requires=[
-        # 'perfmetrics',
         'jsonschema==2.3.0',
         'google-api-python-client==1.3.1',
         'oauth2client==1.3',
