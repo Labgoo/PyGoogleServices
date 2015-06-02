@@ -202,7 +202,6 @@ class BigQueryClient(GoogleCloudClient):
         try:
             logging.info('about to monitor job: %s', job_id)
             job = self.api_client.jobs().get(projectId=project_id, jobId=job_id).execute()
-            logging.info('Got job response: %s', job)
 
             state = job['status']['state']
             if state == 'DONE':
