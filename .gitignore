@@ -11,3 +11,4 @@ googleservices.egg-info
 .eggs
 .coverage
 nosetests.xml
+.idea
