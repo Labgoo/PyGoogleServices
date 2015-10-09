@@ -36,11 +36,17 @@ class GoogleCloudStorageClient(GoogleCloudClient):
         return response
 
     def delete_file(self, bucket_name, file_name):
-        return self.objects().delete(bucket=bucket_name, name=file_name).execute()
+        return self.objects().delete(bucket=bucket_name, object=file_name).execute()
 
     def list_files(self, bucket_name, prefix=None):
         return self.objects().list(bucket=bucket_name, projection=None, versions=None, prefix=prefix,
                                    maxResults=None, pageToken=None, delimiter=None).execute()
+
+    def list_file_names(self, bucket_name, prefix=None):
+        response = self.list_files(bucket_name, prefix)
+        if not response or 'items' not in response:
+            return []
+        return [item['name'] for item in response['items']]
 
     @staticmethod
     def create_signed_url(bucket_name, file_name, service_account_key_file, service_account_mail, expiration=None, ):
