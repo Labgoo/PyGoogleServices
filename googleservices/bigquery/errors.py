@@ -1,8 +1,8 @@
+import textwrap
+
 from googleservices.shared.errors import GoogleCloudError
 
 __author__ = 'ekampf'
-
-import textwrap
 
 
 class BigQueryError(GoogleCloudError):

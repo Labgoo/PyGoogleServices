@@ -40,11 +40,10 @@ class GoogleCloudError(Exception):
 
         if not reason or not message:
             return GoogleCloudInterfaceError(
-                'Error reported by server with missing error fields. ' 'Server returned: %s' % (str(server_error),))
+                'Error reported by server with missing error fields. ', 'Server returned: %s' % (str(server_error)), error_ls, job_ref=job_ref)
 
         if reason == 'authError':
-            return GoogleCloudAuthorizationError(message)
-
+            return GoogleCloudAuthorizationError(message, error, error_ls, job_ref=job_ref)
         if reason == 'notFound':
             return GoogleCloudNotFoundError(message, error, error_ls, job_ref=job_ref)
         if reason == 'backendError':

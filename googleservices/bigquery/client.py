@@ -1,18 +1,17 @@
+import json
+import logging
+
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleservices.shared.base_client import GoogleCloudClient
 
 from googleservices.shared.client import GoogleCloudModel, GoogleCloudHttp
 
-
-__author__ = 'ekampf'
-
-
-import json
-import logging
-
 from .errors import BigQueryError, BigQueryDuplicateError, \
                     BigQueryStreamingMaximumRowSizeExceededError
+
+
+__author__ = 'ekampf'
 
 
 # pylint: disable=E1002

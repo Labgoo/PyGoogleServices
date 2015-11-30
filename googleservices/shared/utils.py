@@ -13,27 +13,24 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
     if use_jwt_credentials_auth:  # Local debugging using pem file
         scope = 'https://www.googleapis.com/auth/devstorage.read_write'
         from oauth2client.client import SignedJwtAssertionCredentials
-        credentials = SignedJwtAssertionCredentials(jwt_account_name, jwt_key_func(), scope=scope)
         logging.debug("Using Standard jwt authentication")
-        return credentials
+        return SignedJwtAssertionCredentials(jwt_account_name, jwt_key_func(), scope=scope)
     elif is_in_appengine():  # App engine
         scope = 'https://www.googleapis.com/auth/devstorage.read_write'
         from oauth2client.appengine import AppAssertionCredentials
-        credentials = AppAssertionCredentials(scope=scope)
         logging.debug("Using Standard appengine authentication")
-        return credentials
+        return AppAssertionCredentials(scope=scope)
     elif oauth_credentails_file:  # Local oauth token
         storage = Storage(oauth_credentails_file)
+        logging.debug("Using Standard OAuth authentication")
         credentials = storage.get()
         if not credentials:
             raise GoogleCloudAuthorizationConfigurationError('No credential file present')
-        logging.debug("Using Standard OAuth authentication")
         return credentials
     elif is_in_gce_machine():  # GCE authorization
         from oauth2client import gce
-        credentials = gce.AppAssertionCredentials('')
         logging.debug("Using GCE authentication")
-        return credentials
+        return gce.AppAssertionCredentials('')
     raise GoogleCloudAuthorizationConfigurationError('No Credentials provided')
 
 
@@ -53,14 +50,14 @@ def is_in_gce_machine():
 
 def get_gce_unique_id(http):
     try:
-        resp, unique_machine_id = http.request(
+        response, unique_machine_id = http.request(
             'http://metadata.google.internal/computeMetadata/v1beta1/instance/id')
-    except httplib2.ServerNotFoundError:
-        raise GoogleCloudComputeFailedToGetUniqueIdError('Not on gce machine')
+    except httplib2.ServerNotFoundError, e:
+        raise GoogleCloudComputeFailedToGetUniqueIdError('Not on gce machine', e.message, None)
 
-    if int(resp['status']) != 200:
-        logging.error("Error getting machine id: %s", resp)
-        raise GoogleCloudComputeFailedToGetUniqueIdError()  # TODO parse error
+    if int(response['status']) != 200:
+        logging.error('Error getting machine id: %s', response)
+        raise GoogleCloudComputeFailedToGetUniqueIdError('Error getting machine id', None, None)  # TODO parse error
 
     return unique_machine_id
 

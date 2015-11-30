@@ -1,7 +1,7 @@
-__author__ = 'ekampf'
-
 from datetime import timedelta, datetime
 
+
+__author__ = 'ekampf'
 
 def get_table_id(table_id, d):
     return "{table_id}{day}".format(table_id=table_id, day=d.strftime("%Y%m%d"))
