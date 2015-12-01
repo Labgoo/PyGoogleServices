@@ -3,3 +3,4 @@ pylint
 unittest2
 coverage
 nose
+nose-cov
