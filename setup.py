@@ -65,6 +65,7 @@ setup(
         'oauth2client==1.3',
         # 'httplib2==0.9',
         'pycrypto==2.6.1',
+        'Crypto',
         'requests==2.7.0',
     ],
     classifiers=[
