@@ -45,3 +45,4 @@ doc:
 	make -C $(DOC_DIR) html
 
 .PHONY: all default clean coverage doc pylint test
+
