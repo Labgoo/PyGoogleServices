@@ -4,3 +4,4 @@ unittest2
 coverage
 nose
 nose-cov
+pycrypto
