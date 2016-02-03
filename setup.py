@@ -65,7 +65,6 @@ setup(
         'google-api-python-client==1.4.2',
         'oauth2client',
         'pycrypto==2.6.1',
-        'Crypto',
         'requests==2.7.0',
     ],
     classifiers=[
