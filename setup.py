@@ -57,6 +57,8 @@ setup(
         'nose'
     ],
     tests_require=[
+        'google-api-python-client==1.4.2',
+        'oauth2client',
         'mock',
     ],
     install_requires=[
