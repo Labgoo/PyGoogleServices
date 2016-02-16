@@ -58,12 +58,12 @@ setup(
     ],
     tests_require=[
         'google-api-python-client==1.4.2',
-        'oauth2client',
+        'oauth2client==1.5.2',
         'mock',
     ],
     install_requires=[
         'google-api-python-client==1.4.2',
-        'oauth2client',
+        'oauth2client==1.5.2',
         'pycrypto==2.6.1',
         'requests==2.7.0',
     ],
