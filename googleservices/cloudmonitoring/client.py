@@ -28,30 +28,29 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         unique_machine_id = get_gce_unique_id(http)
 
         timeseries_dict = {
-          'timeSeries': [{
-              'metric': {
-                  'type': 'custom.googleapis.com/custom/%s' % metric_name,
-                  'labels': {},
-              },
-              'resource': {
-                  'type': 'gce_instance',
-                  'labels': {
-                      'instance_id': unique_machine_id,
-                      'zone': 'us-central1-a'}
-              },
-              'metricKind': 'GAUGE',
-              'valueType': 'double',
-              'points': [
+            'timeSeries': [{
+                'metric': {
+                    'type': 'custom.googleapis.com/custom/%s' % metric_name,
+                    'labels': {},
+                },
+                'resource': {
+                    'type': 'gce_instance',
+                    'labels': {
+                        'instance_id': unique_machine_id,
+                        'zone': 'us-central1-a'}
+                },
+                'metricKind': 'GAUGE',
+                'valueType': 'double',
+                'points': [
                 {
                     'interval': {
                         'endTime': timestamp,
                         'startTime': timestamp,
-                        },
+                    },
                     'value': {
                         'doubleValue': double_value,
                     },
-                }
-              ],
+                }],
             }],
         }
 
