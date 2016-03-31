@@ -17,12 +17,12 @@ def get_build_number():
             build_number = f.read()
             build_number = re.sub("[^a-z0-9]+","", build_number, flags=re.IGNORECASE)
             return '.' + build_number
-            
+
     return ''
 
 def get_version(package_name):
     build_number = get_build_number()
-    
+
     version_re = re.compile(r"^__version__ = [\"']([\w_.-]+)[\"']$")
     package_components = package_name.split('.')
     init_path = os.path.join(root_dir, *(package_components + ['__init__.py']))
@@ -57,15 +57,14 @@ setup(
         'nose'
     ],
     tests_require=[
+        'google-api-python-client==1.4.2',
+        'oauth2client==1.5.2',
         'mock',
     ],
     install_requires=[
-        # 'jsonschema==2.3.0',
         'google-api-python-client==1.5.0',
-        'oauth2client==1.3',
-        # 'httplib2==0.9',
+        'oauth2client==1.5.2',
         'pycrypto==2.6.1',
-        'Crypto',
         'requests==2.7.0',
     ],
     classifiers=[
