@@ -28,29 +28,35 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         unique_machine_id = get_gce_unique_id(http)
 
         timeseries_dict = {
-            'kind': 'cloudmonitoring#writeTimeseriesRequest',
-            'commonLabels': {
-                'compute.googleapis.com/resource_type': 'instance',
-                'compute.googleapis.com/resource_id': unique_machine_id
-            },
-            'timeseries': [
+          'timeSeries': [{
+              'metric': {
+                  'type': 'custom.googleapis.com/custom/%s' % metric_name,
+                  'labels': {},
+              },
+              'resource': {
+                  'type': 'gce_instance',
+                  'labels': {
+                      'instance_id': unique_machine_id,
+                      'zone': 'us-central1-a'}
+              },
+              'metricKind': 'GAUGE',
+              'valueType': 'double',
+              'points': [
                 {
-                    'timeseriesDesc': {
-                        'metric': 'custom.cloudmonitoring.googleapis.com/custom/%s' % metric_name,
-                        'labels': {
-                        }
-                    },
-                    'point': {
-                        'start': timestamp,
-                        'end': timestamp,
-                        'doubleValue': double_value
+                    'interval': {
+                        'endTime': timestamp,
+                        'startTime': timestamp,
+                        },
+                    'value': {
+                        'doubleValue': double_value,
                     },
                 }
-            ]
+              ],
+            }],
         }
 
         resp, _ = http.request(
-            uri='https://www.googleapis.com/cloudmonitoring/v2beta2/projects/%s/timeseries:write' % project_id,
+            uri='https://monitoring.googleapis.com/v3/projects/%s/timeSeries:write' % project_id,
             method='POST',
             headers={'Content-Type': 'application/json'},
             body=json.dumps(timeseries_dict))
@@ -79,6 +85,4 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         monitoring_model = GoogleCloudModel(trace=self.trace)
         monitoring_http = GoogleCloudHttp.factory(monitoring_model)
 
-        return build("cloudmonitoring", "v2beta2", http=_http, model=monitoring_model, requestBuilder=monitoring_http)
-
-
+        return build("cloudmonitoring", "v3", http=_http, model=monitoring_model, requestBuilder=monitoring_http)
