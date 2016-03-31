@@ -57,13 +57,13 @@ setup(
         'nose'
     ],
     tests_require=[
-        'google-api-python-client==1.5.0',
-        'oauth2client==2.0.0',
+        'google-api-python-client==1.4.2',
+        'oauth2client==1.5.2',
         'mock',
     ],
     install_requires=[
-        'google-api-python-client==1.5.0',
-        'oauth2client==2.0.0',
+        'google-api-python-client==1.4.2',
+        'oauth2client==1.5.2',
         'pycrypto==2.6.1',
         'requests==2.7.0',
     ],
