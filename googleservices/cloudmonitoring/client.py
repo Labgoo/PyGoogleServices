@@ -41,8 +41,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
                 },
                 'metricKind': 'GAUGE',
                 'valueType': 'double',
-                'points': [
-                {
+                'points': [{
                     'interval': {
                         'endTime': timestamp,
                         'startTime': timestamp,
