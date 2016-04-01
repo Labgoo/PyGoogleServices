@@ -13,6 +13,7 @@ clean:
 	find . -type f -path '*/__pycache__/*' -delete
 	find . -type d -empty -delete
 	@rm -rf tmp_test/
+	@rm -rf .venv/
 
 test:
 	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python -W default setup.py nosetests --with-xunit --verbosity=2
