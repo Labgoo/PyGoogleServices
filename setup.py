@@ -51,8 +51,6 @@ setup(
     keywords=[],
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     setup_requires=[
-        'google-api-python-client==1.4.2',
-        'oauth2client==1.5.2',
         'setuptools==20.6.7',
         'setuptools-lint==0.4.1',
         'unittest2',
