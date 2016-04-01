@@ -5,7 +5,7 @@
 
 # Python code to execute, usually for sys.path manipulation such as
 # pygtk.require().
-# init-hook="import sys;"
+init-hook='sys.path.append(".venv/lib/python2.7/site-packages")'
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.

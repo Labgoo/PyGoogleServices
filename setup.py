@@ -4,21 +4,22 @@
 import codecs
 import os
 import re
-import sys
 
 from setuptools import setup, find_packages
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
+
 
 def get_build_number():
     fname = 'build.info'
     if os.path.isfile(fname):
         with open(fname) as f:
             build_number = f.read()
-            build_number = re.sub("[^a-z0-9]+","", build_number, flags=re.IGNORECASE)
+            build_number = re.sub("[^a-z0-9]+", "", build_number, flags=re.IGNORECASE)
             return '.' + build_number
 
     return ''
+
 
 def get_version(package_name):
     build_number = get_build_number()
