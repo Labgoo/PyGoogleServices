@@ -50,7 +50,7 @@ setup(
     keywords=[],
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     setup_requires=[
-        'setuptools>=0.8',
+        'setuptools>=17.1',
         'setuptools-lint',
         'unittest2',
         'coverage',

@@ -1,22 +1,12 @@
-PACKAGE=googleservices
-TESTS_DIR=tests
-DOC_DIR=docs
-
-# Use current python binary instead of system default.
-COVERAGE = python $(shell which coverage)
-
 all: default
 
-default: clean test pylint
+default: clean dev_deps test pylint
 
 .venv:
 	if [ ! -e ".venv/bin/activate_this.py" ] ; then virtualenv --clear .venv ; fi
 
-deps: .venv
-	PYTHONPATH=.venv ; . .venv/bin/activate && .venv/bin/pip install -U -r requirements.txt
-
 dev_deps: .venv
-	PYTHONPATH=.venv ; . .venv/bin/activate && .venv/bin/pip install -U -r dev_requirements.txt
+	PYTHONPATH=.venv ; . .venv/bin/activate && .venv/bin/pip install -U pip==8.1.1 && .venv/bin/pip install -U -r dev_requirements.txt
 
 clean:
 	find . -type f -name '*.pyc' -delete
@@ -28,13 +18,7 @@ test:
 	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python -W default setup.py nosetests --with-xunit --verbosity=2
 
 pylint:
-	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python setup.py lint --lint-rcfile=.pylintrc --lint-reports=no --lint-packages=$(PACKAGE)/
-
-coverage:
-	$(COVERAGE) erase
-	$(COVERAGE) run "--include=$(PACKAGE)/*.py,$(TESTS_DIR)/*.py" --branch setup.py test
-	$(COVERAGE) report "--include=$(PACKAGE)/*.py,$(TESTS_DIR)/*.py"
-	$(COVERAGE) html "--include=$(PACKAGE)/*.py,$(TESTS_DIR)/*.py"
+	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python setup.py lint --lint-rcfile=.pylintrc --lint-reports=no --lint-packages=googleservices/
 
 deploy:
 	rm -rf dist/
@@ -44,4 +28,3 @@ deploy:
 doc:
 	make -C $(DOC_DIR) html
 
-.PHONY: all default clean coverage doc pylint test
