@@ -42,7 +42,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
                     }
                 },
                 'metricKind': 'GAUGE',
-                'valueType': 'double',
+                'valueType': 'INT64',
                 'points': [{
                     'interval': {
                         'endTime': timestamp,
