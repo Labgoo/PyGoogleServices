@@ -53,8 +53,8 @@ setup(
     setup_requires=[
         'google-api-python-client==1.4.2',
         'oauth2client==1.5.2',
-        'setuptools>=17.1',
-        'setuptools-lint',
+        'setuptools==20.6.7',
+        'setuptools-lint==0.4.1',
         'unittest2',
         'coverage',
         'nose'
