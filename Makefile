@@ -6,7 +6,7 @@ default: clean dev_deps test pylint
 	if [ ! -e ".venv/bin/activate_this.py" ] ; then virtualenv --clear .venv ; fi
 
 dev_deps: .venv
-	PYTHONPATH=$(PYTHONPATH):.venv ; . .venv/bin/activate && .venv/bin/pip install -U pip==8.1.1 && .venv/bin/pip install -U -r dev_requirements.txt
+	PYTHONPATH=$(PYTHONPATH):.venv ; . .venv/bin/activate && .venv/bin/pip install -U -r dev_requirements.txt
 
 clean:
 	find . -type f -name '*.pyc' -delete
