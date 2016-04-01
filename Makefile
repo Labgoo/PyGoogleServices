@@ -19,7 +19,7 @@ test:
 	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python -W default setup.py nosetests --with-xunit --verbosity=2
 
 pylint:
-	PYTHONPATH=$PYTHONPATH:.venv:. . .venv/bin/activate && python setup.py lint --lint-rcfile=.pylintrc --lint-reports=no --lint-packages=googleservices/
+	PYTHONPATH=$PYTHONPATH:.venv:.venv/lib/python2.7/site-packages:. . .venv/bin/activate && python setup.py lint --lint-rcfile=.pylintrc --lint-reports=no --lint-packages=googleservices/
 
 deploy:
 	rm -rf dist/
