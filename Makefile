@@ -7,13 +7,10 @@ COVERAGE = python $(shell which coverage)
 
 all: default
 
-default: clean test pylint
+default: clean dev_deps pylint test
 
 .venv:
 	if [ ! -e ".venv/bin/activate_this.py" ] ; then virtualenv --clear .venv ; fi
-
-deps: .venv
-	PYTHONPATH=.venv ; . .venv/bin/activate && .venv/bin/pip install -U -r requirements.txt
 
 dev_deps: .venv
 	PYTHONPATH=.venv ; . .venv/bin/activate && .venv/bin/pip install -U -r dev_requirements.txt
