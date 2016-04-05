@@ -152,5 +152,5 @@ class GoogleCloudQuotaExceededError(GoogleCloudServiceError):
     pass
 
 
-class GoogleCloudComputeFailedToGetUniqueIdError(GoogleCloudServiceError):
+class GoogleCloudComputeFailedToGetMetaDataError(GoogleCloudServiceError):
     pass

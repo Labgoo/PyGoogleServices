@@ -6,7 +6,7 @@ from googleapiclient.discovery import build
 from googleservices.cloudmonitoring.errors import CloudMonitoringError
 from googleservices.shared.base_client import GoogleCloudClient
 from googleservices.shared.client import GoogleCloudHttp, GoogleCloudModel
-from googleservices.shared.utils import get_google_credentials, get_gce_unique_id, get_timestamp_RFC3375
+from googleservices.shared.utils import get_google_credentials, get_gce_unique_id, get_timestamp_RFC3375, get_gce_zone
 
 __author__ = 'krakover'
 
@@ -26,31 +26,37 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
 
         # Writing not supported by API - TODO REST call remove once api supports this
         unique_machine_id = get_gce_unique_id(http)
+        machine_zone = get_gce_zone(http)
 
         timeseries_dict = {
-            'kind': 'cloudmonitoring#writeTimeseriesRequest',
-            'commonLabels': {
-                'compute.googleapis.com/resource_type': 'instance',
-                'compute.googleapis.com/resource_id': unique_machine_id
-            },
-            'timeseries': [
-                {
-                    'timeseriesDesc': {
-                        'metric': 'custom.cloudmonitoring.googleapis.com/custom/%s' % metric_name,
-                        'labels': {
-                        }
+            'timeSeries': [{
+                'metric': {
+                    'type': 'custom.googleapis.com/custom/%s' % metric_name,
+                    'labels': {},
+                },
+                'resource': {
+                    'type': 'gce_instance',
+                    'labels': {
+                        'instance_id': unique_machine_id,
+                        'zone': machine_zone
+                    }
+                },
+                'metricKind': 'GAUGE',
+                'valueType': 'INT64',
+                'points': [{
+                    'interval': {
+                        'endTime': timestamp,
+                        'startTime': timestamp,
                     },
-                    'point': {
-                        'start': timestamp,
-                        'end': timestamp,
-                        'doubleValue': double_value
+                    'value': {
+                        'doubleValue': double_value,
                     },
-                }
-            ]
+                }],
+            }],
         }
 
         resp, _ = http.request(
-            uri='https://www.googleapis.com/cloudmonitoring/v2beta2/projects/%s/timeseries:write' % project_id,
+            uri='https://monitoring.googleapis.com/v3/projects/%s/timeSeries:write' % project_id,
             method='POST',
             headers={'Content-Type': 'application/json'},
             body=json.dumps(timeseries_dict))
@@ -79,6 +85,4 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         monitoring_model = GoogleCloudModel(trace=self.trace)
         monitoring_http = GoogleCloudHttp.factory(monitoring_model)
 
-        return build("cloudmonitoring", "v2beta2", http=_http, model=monitoring_model, requestBuilder=monitoring_http)
-
-
+        return build("cloudmonitoring", "v3", http=_http, model=monitoring_model, requestBuilder=monitoring_http)
