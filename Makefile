@@ -1,6 +1,6 @@
 all: default
 
-default: clean dev_deps test pylint
+default: clean dev_deps pylint test
 
 .venv:
 	if [ ! -e ".venv/bin/activate_this.py" ] ; then virtualenv --clear .venv ; fi
