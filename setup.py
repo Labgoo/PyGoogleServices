@@ -51,8 +51,8 @@ setup(
     keywords=[],
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     setup_requires=[
-        'setuptools==20.6.7',
-        'setuptools-lint==0.4.1',
+        'setuptools',
+        'setuptools-lint',
         'unittest2',
         'coverage',
         'nose'
