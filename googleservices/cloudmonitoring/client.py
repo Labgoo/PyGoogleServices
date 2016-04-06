@@ -27,6 +27,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         # Writing not supported by API - TODO REST call remove once api supports this
         unique_machine_id = get_gce_unique_id(http)
         machine_zone = get_gce_zone(http)
+        machine_zone = machine_zone[machine_zone.rfind('/')+1:]
 
         timeseries_dict = {
             'timeSeries': [{
@@ -56,7 +57,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         }
 
         resp, _ = http.request(
-            uri='https://monitoring.googleapis.com/v3/projects/%s/timeSeries:write' % project_id,
+            uri='https://monitoring.googleapis.com/v3/projects/%s/timeSeries' % project_id,
             method='POST',
             headers={'Content-Type': 'application/json'},
             body=json.dumps(timeseries_dict))
