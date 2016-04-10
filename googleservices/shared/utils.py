@@ -3,8 +3,7 @@ import os
 import datetime
 import httplib2
 from oauth2client.file import Storage
-from googleservices.shared.errors import GoogleCloudComputeFailedToGetUniqueIdError, \
-    GoogleCloudAuthorizationConfigurationError
+from shared.errors import GoogleCloudAuthorizationConfigurationError, GoogleCloudComputeFailedToGetMetaDataError
 
 __author__ = 'krakover'
 
@@ -48,18 +47,26 @@ def is_in_gce_machine():
         return False
 
 
+def get_gce_zone(http):
+    return get_gce_metadata(http, 'zone')
+
+
 def get_gce_unique_id(http):
+    return get_gce_metadata(http, 'id')
+
+
+def get_gce_metadata(http, field):
     try:
-        response, unique_machine_id = http.request(
-            'http://metadata.google.internal/computeMetadata/v1beta1/instance/id')
+        response, field_value = http.request(
+            'http://metadata.google.internal/computeMetadata/v1beta1/instance/%s' % field)
     except httplib2.ServerNotFoundError, e:
-        raise GoogleCloudComputeFailedToGetUniqueIdError('Not on gce machine', e.message, None)
+        raise GoogleCloudComputeFailedToGetMetaDataError('Not on gce machine', e.message, None)
 
     if int(response['status']) != 200:
         logging.error('Error getting machine id: %s', response)
-        raise GoogleCloudComputeFailedToGetUniqueIdError('Error getting machine id', None, None)  # TODO parse error
+        raise GoogleCloudComputeFailedToGetMetaDataError('Error getting %s' % field, None, None)  # TODO parse error
 
-    return unique_machine_id
+    return field_value
 
 
 def get_timestamp_RFC3375():
@@ -68,4 +75,3 @@ def get_timestamp_RFC3375():
     now = now.replace(microsecond=0)
     timestamp = now.isoformat('T') + '.00Z'  # Create RFC 3375 date format
     return timestamp
-    
