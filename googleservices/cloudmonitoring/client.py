@@ -26,6 +26,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
         self.write_timeseries_custon_instance_metric_int_value_v2(project_id, metric_name, double_value)
 
     def write_timeseries_custon_instance_metric_int_value_v3(self, project_id, metric_name, int_value):
+        # pylint: disable=C0330
         timestamp = get_timestamp_RFC3375()
         http = self.get_http_for_request()
 
