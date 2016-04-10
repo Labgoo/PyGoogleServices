@@ -3,7 +3,8 @@ import os
 import datetime
 import httplib2
 from oauth2client.file import Storage
-from shared.errors import GoogleCloudAuthorizationConfigurationError, GoogleCloudComputeFailedToGetMetaDataError
+from googleservices.shared.errors import GoogleCloudComputeFailedToGetMetaDataError, \
+    GoogleCloudAuthorizationConfigurationError
 
 __author__ = 'krakover'
 

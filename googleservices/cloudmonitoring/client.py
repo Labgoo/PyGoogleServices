@@ -91,31 +91,38 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
 
         # Writing not supported by API - TODO REST call remove once api supports this
         unique_machine_id = get_gce_unique_id(http)
+        machine_zone = get_gce_zone(http)
+        machine_zone = machine_zone[machine_zone.rfind('/')+1:]
 
         timeseries_dict = {
-            'kind': 'cloudmonitoring#writeTimeseriesRequest',
-            'commonLabels': {
-                'compute.googleapis.com/resource_type': 'instance',
-                'compute.googleapis.com/resource_id': unique_machine_id
-            },
-            'timeseries': [
-                {
-                    'timeseriesDesc': {
-                        'metric': 'custom.cloudmonitoring.googleapis.com/custom/%s' % metric_name,
-                        'labels': {
-                        }
+            'timeSeries': [{
+                'metric': {
+                    'type': 'custom.googleapis.com/custom/%s' % metric_name,
+                    'labels': {},
+                },
+                'resource': {
+                    'type': 'gce_instance',
+                    'labels': {
+                        'instance_id': unique_machine_id,
+                        'zone': machine_zone
+                    }
+                },
+                'metricKind': 'GAUGE',
+                'valueType': 'INT64',
+                'points': [{
+                    'interval': {
+                        'endTime': timestamp,
+                        'startTime': timestamp,
                     },
-                    'point': {
-                        'start': timestamp,
-                        'end': timestamp,
-                        'doubleValue': int_value
+                    'value': {
+                        'doubleValue': double_value,
                     },
-                }
-            ]
+                }],
+            }],
         }
 
         resp, _ = http.request(
-            uri='https://www.googleapis.com/cloudmonitoring/v2beta2/projects/%s/timeseries:write' % project_id,
+            uri='https://monitoring.googleapis.com/v3/projects/%s/timeSeries' % project_id,
             method='POST',
             headers={'Content-Type': 'application/json'},
             body=json.dumps(timeseries_dict))

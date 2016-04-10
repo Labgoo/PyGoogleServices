@@ -4,25 +4,26 @@
 import codecs
 import os
 import re
-import sys
 
 from setuptools import setup, find_packages
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
+
 
 def get_build_number():
     fname = 'build.info'
     if os.path.isfile(fname):
         with open(fname) as f:
             build_number = f.read()
-            build_number = re.sub("[^a-z0-9]+","", build_number, flags=re.IGNORECASE)
+            build_number = re.sub("[^a-z0-9]+", "", build_number, flags=re.IGNORECASE)
             return '.' + build_number
-            
+
     return ''
+
 
 def get_version(package_name):
     build_number = get_build_number()
-    
+
     version_re = re.compile(r"^__version__ = [\"']([\w_.-]+)[\"']$")
     package_components = package_name.split('.')
     init_path = os.path.join(root_dir, *(package_components + ['__init__.py']))
@@ -50,22 +51,21 @@ setup(
     keywords=[],
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     setup_requires=[
-        'setuptools>=0.8',
+        'setuptools',
         'setuptools-lint',
         'unittest2',
         'coverage',
         'nose'
     ],
     tests_require=[
+        'google-api-python-client==1.4.2',
+        'oauth2client==1.5.2',
         'mock',
     ],
     install_requires=[
-        # 'jsonschema==2.3.0',
-        'google-api-python-client==1.3.1',
-        'oauth2client==1.3',
-        # 'httplib2==0.9',
+        'google-api-python-client==1.4.2',
+        'oauth2client==1.5.2',
         'pycrypto==2.6.1',
-        'Crypto',
         'requests==2.7.0',
     ],
     classifiers=[
