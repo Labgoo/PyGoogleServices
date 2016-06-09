@@ -17,7 +17,7 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
         return SignedJwtAssertionCredentials(jwt_account_name, jwt_key_func(), scope=scope)
     elif is_in_appengine():  # App engine
         scope = 'https://www.googleapis.com/auth/devstorage.read_write'
-        from oauth2client.appengine import AppAssertionCredentials
+        from oauth2client.contrib.appengine import AppAssertionCredentials
         logging.debug("Using Standard appengine authentication")
         return AppAssertionCredentials(scope=scope)
     elif oauth_credentails_file:  # Local oauth token
@@ -28,9 +28,9 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
             raise GoogleCloudAuthorizationConfigurationError('No credential file present')
         return credentials
     elif is_in_gce_machine():  # GCE authorization
-        from oauth2client import gce
+        from oauth2client.contrib.gcr import AppAssertionCredentials
         logging.debug("Using GCE authentication")
-        return gce.AppAssertionCredentials('')
+        return AppAssertionCredentials('')
     raise GoogleCloudAuthorizationConfigurationError('No Credentials provided')
 
 
