@@ -9,12 +9,11 @@ from googleservices.shared.errors import GoogleCloudComputeFailedToGetMetaDataEr
 __author__ = 'krakover'
 
 
+# pylint: disable=unused-argument
+# FIXME (barak): we don't use JWT anywhere but I don't want to change the signature here
 def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', jwt_key_func=None, oauth_credentails_file=None):
     if use_jwt_credentials_auth:  # Local debugging using pem file
-        scope = 'https://www.googleapis.com/auth/devstorage.read_write'
-        from oauth2client.client import SignedJwtAssertionCredentials
-        logging.debug("Using Standard jwt authentication")
-        return SignedJwtAssertionCredentials(jwt_account_name, jwt_key_func(), scope=scope)
+        raise Exception("JWT tokens no longer supported (and probably not necessary")
     elif is_in_appengine():  # App engine
         scope = 'https://www.googleapis.com/auth/devstorage.read_write'
         from oauth2client.contrib.appengine import AppAssertionCredentials
@@ -28,7 +27,7 @@ def get_google_credentials(use_jwt_credentials_auth=False, jwt_account_name='', 
             raise GoogleCloudAuthorizationConfigurationError('No credential file present')
         return credentials
     elif is_in_gce_machine():  # GCE authorization
-        from oauth2client.contrib.gcr import AppAssertionCredentials
+        from oauth2client.contrib.gce import AppAssertionCredentials
         logging.debug("Using GCE authentication")
         return AppAssertionCredentials('')
     raise GoogleCloudAuthorizationConfigurationError('No Credentials provided')
