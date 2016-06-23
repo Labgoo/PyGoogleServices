@@ -69,7 +69,7 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
 
         if int(resp['status']) != 200:
             logging.error('Error reporting to cloud monitoring: %s from instance %s', resp, unique_machine_id)
-            raise CloudMonitoringError('received error %s while attempting to write time series data' % resp['status'])
+            # raise CloudMonitoringError('received error %s while attempting to write time series data' % resp['status'])
 
     def write_timeseries_custon_instance_metric_int_value_v2(self, project_id, metric_name, int_value):
         # pylint: disable=C0330
