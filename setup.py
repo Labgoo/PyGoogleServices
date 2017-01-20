@@ -65,7 +65,7 @@ setup(
     install_requires=[
         'google-api-python-client==1.5.1',
         'oauth2client==2.1.0',
-        'pycrypto==2.6.1',
+        'pycryptodome',
         'requests==2.7.0',
     ],
     classifiers=[
