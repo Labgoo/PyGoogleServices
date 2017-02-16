@@ -22,8 +22,6 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
 
     def write_timeseries_custon_instance_metric_double_value(self, project_id, metric_name, double_value):
         self.write_timeseries_custon_instance_metric_int_value_v3(project_id, metric_name, double_value)
-        # Need to also write to v2, as long as v3 is not supporting autoscaling
-        self.write_timeseries_custon_instance_metric_int_value_v2(project_id, metric_name, double_value)
 
     def write_timeseries_custon_instance_metric_int_value_v3(self, project_id, metric_name, int_value):
         # pylint: disable=C0330
@@ -69,44 +67,6 @@ class GoogleCloudMonitoringClient(GoogleCloudClient):
 
         if int(resp['status']) != 200:
             logging.error('Error reporting to cloud monitoring: %s from instance %s', resp, unique_machine_id)
-            # raise CloudMonitoringError('received error %s while attempting to write time series data' % resp['status'])
-
-    def write_timeseries_custon_instance_metric_int_value_v2(self, project_id, metric_name, int_value):
-        # pylint: disable=C0330
-        timestamp = get_timestamp_RFC3375()
-        http = self.get_http_for_request()
-
-        # Writing not supported by API - TODO REST call remove once api supports this
-        unique_machine_id = get_gce_unique_id(http)
-
-        timeseries_dict = {
-            'kind': 'cloudmonitoring#writeTimeseriesRequest',
-            'commonLabels': {
-                'compute.googleapis.com/resource_type': 'instance',
-                'compute.googleapis.com/resource_id': unique_machine_id
-            },
-            'timeseries': [{
-                'timeseriesDesc': {
-                    'metric': 'custom.cloudmonitoring.googleapis.com/custom/%s' % metric_name,
-                    'labels': {}
-                },
-                'point': {
-                    'start': timestamp,
-                    'end': timestamp,
-                    'doubleValue': int_value
-                }
-            }]
-        }
-
-        resp, _ = http.request(
-            uri='https://www.googleapis.com/cloudmonitoring/v2beta2/projects/%s/timeseries:write' % project_id,
-            method='POST',
-            headers={'Content-Type': 'application/json'},
-            body=json.dumps(timeseries_dict))
-
-        if int(resp['status']) != 200:
-            logging.error('Error reporting to cloud monitoring: %s from instance %s', resp, unique_machine_id)
-            raise CloudMonitoringError('received error %s while attempting to write time series data' % resp['status'])
 
     @property
     def credentials(self):
