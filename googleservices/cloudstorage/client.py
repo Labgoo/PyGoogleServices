@@ -2,13 +2,16 @@ import base64
 import io
 import datetime
 import md5
-from Crypto.Cipher import PKCS1_v1_5
-from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
+
 from googleapiclient.discovery import build
+
 from googleapiclient.http import MediaIoBaseUpload
 from googleservices.shared.base_client import GoogleCloudClient
 from googleservices.shared.client import GoogleCloudHttp, GoogleCloudModel
+
+from Crypto.Cipher import PKCS1_v1_5
+from Crypto.Hash import SHA256
+from Crypto.PublicKey import RSA
 import requests
 
 __author__ = 'krakover'
